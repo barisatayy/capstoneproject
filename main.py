@@ -47,7 +47,11 @@ class HrLines:
 
 load_dotenv()
 
-df = pd.read_csv("datas/Dataset.csv")
+try:
+    df = pd.read_csv("datas/Dataset.csv")
+except Exception:
+    url = "https://drive.google.com/uc?id=1P7m86tazukZro1GKYa33SzJJA01LmrAu&export=download"
+    df = pd.read_csv(url)
 df = df.reset_index()
 df["View"] = df["View"].fillna("Nowhere")
 df["Furnishing_Status"] = df["Furnishing_Status"].fillna("Nothing")
