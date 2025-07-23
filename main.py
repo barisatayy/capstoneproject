@@ -53,9 +53,12 @@ except Exception:
     url = "https://drive.google.com/uc?id=1P7m86tazukZro1GKYa33SzJJA01LmrAu&export=download"
     df = pd.read_csv(url)
 df = df.reset_index()
+
 df["View"] = df["View"].fillna("Nowhere")
 df["Furnishing_Status"] = df["Furnishing_Status"].fillna("Nothing")
+
 df.drop(columns=["index", "No"], inplace=True)
+
 df2 = df.sample(n=1000, random_state=42)
 
 cities = df["Location"].unique()
@@ -75,51 +78,31 @@ st.markdown(
 
 hr.hrH()
 
-col1, col2, col3 = st.columns([1.4, 0.02, 0.5])
+selected = option_menu(
+    menu_title=None,
+    options=["Database", "Analytics", "Data set information",
+             "Prediction Panel"],
+    icons=["database", "bar-chart", "info", "graph-up", "code"],
+    menu_icon="cast",
+    orientation="horizontal",
+    styles={
+        "icon": {"color": "purple", "font-size": "25px"},
 
-with col1:
-    selected = option_menu(
-        menu_title=None,
-        options=["Database", "Analytics", "Programming information", "Data set information"],
-        icons=["database", "bar-chart", "code", "info"],
-        menu_icon="cast",
-        orientation="horizontal"
-    )
-    if selected == "Database":
+        "container": {"padding": "15px", "gap": "10px"},
 
-        st.subheader("A small random subset of the database")
-        st.write("---")
-        st.dataframe(df2, height=570)
+        "nav-link": {"font-size": "16px", "text-align": "center",
+                     "justify-content": "center", "margin-right": "15px"},
 
+        "nav-link-selected": {"background-color": "grey",
+                              "box-shadow": "0 0 10px purple"}
+    }
+)
+if selected == "Database":
 
-    elif selected == "Data set information":
-        st.subheader("Information about this dataset")
-        st.write("---")
-        st.write(
-            "This dataset is about house prices. It includes basic house information which is taken from [SamWash94]"
-            "(https://www.kaggle.com/datasets/samwash94/dataset-for-house-price-analysis) on Kaggle.")
-        count = len(df)
-        formatted = f"{count:,}"
-        st.write(
-            f"The dataset contains {formatted} rows and {len(df.columns) - 1} columns. This consists of data collected for the year 2024.")
-        st.write("---")
-        col11, col22 = st.columns(2)
-        with col11:
-
-            st.write("The data includes some cities in USA")
-            citiesdf = pd.DataFrame(df["Location"].unique(), columns=["Cities (10)"])
-            st.dataframe(citiesdf)
-        with col22:
-            st.write("The data includes the following columns:")
-            coldf = pd.DataFrame(df.columns, columns=["Columns (26)"])
-            st.dataframe(coldf, height=388)
-
-    elif selected == "Programming information":
-        tab1, tab2 = st.tabs(["Development Proces", "Libraries Used"])
-with col2:
-    hr.hrV("800px")
-with col3:
-    st.subheader("Data Assistant")
+    st.subheader("A small random subset of the database")
+    st.write("---")
+    st.dataframe(df2, height=570)
+    st.title("Data Assistant")
 
     api_key = os.getenv("GEMINI_API_KEY")
     genai.configure(api_key=api_key)
@@ -154,17 +137,42 @@ with col3:
             st.session_state.last_ai_msg = response
             st.rerun()
 
-hr.hrH()
+elif selected == "Data set information":
+    st.subheader("Information about this dataset")
+    st.write("---")
+    st.write(
+        "This dataset is about house prices. It includes basic house information which is taken from [SamWash94]"
+        "(https://www.kaggle.com/datasets/samwash94/dataset-for-house-price-analysis) on Kaggle.")
+    count = len(df)
+    formatted = f"{count:,}"
+    st.write(
+        f"The dataset contains {formatted} rows and {len(df.columns) - 1} columns. This consists of data collected for the year 2024.")
+    st.write("---")
+    col11, col22 = st.columns(2)
+    with col11:
 
-st.title("Prediction Panel")
-st.header("Select the properties you want to predict")
-col01, col02, col03 = st.columns([0.4, 0.4, 2])
-with col01:
-    st.selectbox("Select property type", df["Property_Type"].unique())
-    st.slider("Select land area", 0, df["Land_Area"].max() * 2)
-    st.slider("Select floor area", 0, df["Floor_Area"].max() * 3)
-    st.selectbox("Select condition", df["Condition"].unique())
-    st.selectbox("Select view", df["View"].unique())
-    st.selectbox("Select amenities", df["Amenities"].unique())
-with col02:
-    st.selectbox("Select furnishing type", df["Furnishing_Status"].unique())
+        st.write("The data includes some cities in USA")
+        citiesdf = pd.DataFrame(df["Location"].unique(), columns=["Cities (10)"])
+        st.dataframe(citiesdf)
+    with col22:
+        st.write("The data includes the following columns:")
+        coldf = pd.DataFrame(df.columns, columns=["Columns (26)"])
+        st.dataframe(coldf, height=388)
+
+elif selected == "Programming information":
+    tab1, tab2 = st.tabs(["Development Proces", "Libraries Used"])
+
+elif selected == "Prediction Panel":
+
+    st.title("Prediction Panel")
+    st.header("Select the properties you want to predict")
+    col01, col02, col03 = st.columns([0.4, 0.4, 2])
+    with col01:
+        st.selectbox("Select property type", df["Property_Type"].unique())
+        st.slider("Select land area", 0, df["Land_Area"].max() * 2)
+        st.slider("Select floor area", 0, df["Floor_Area"].max() * 3)
+        st.selectbox("Select condition", df["Condition"].unique())
+        st.selectbox("Select view", df["View"].unique())
+        st.selectbox("Select amenities", df["Amenities"].unique())
+    with col02:
+        st.selectbox("Select furnishing type", df["Furnishing_Status"].unique())
