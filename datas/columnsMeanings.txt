@@ -1,0 +1,18 @@
+Property_Type: Type of the property (e.g., Apartment, Villa, Townhouse).
+Land_Area: Total land area (in square meters).
+Floor_Area: Built-up area (in square meters).
+Condition: Condition of the property (e.g., New, Renovated, Old).
+View: Quality of the view from the property (e.g., Sea View, Garden View).
+Amenities: Air_Conditioning (Yes/No): Availability of air conditioning.
+Heating (Yes/No): Availability of heating systems.
+Furnishing_Status: Whether the property is furnished, semi-furnished, or unfurnished.
+Kitchen_Type: Type of kitchen (e.g., Modular, Basic).
+Balcony (Yes/No): Presence of balconies.
+Latitude and Longitude: Geographic coordinates of the property.
+Location: Name of the locality.
+distance to nearest MRT Station, distance to nearest Hospital, distance to nearest School, distance to nearest Bus Stand, and distance to nearest Airport: Distances (in meters) from key facilities.
+Num_bathrooms: Number of bathrooms.
+Num_rooms: Number of rooms.
+Price: Property price in the local currency.
+Maintenance_Fees: Monthly maintenance cost (if applicable).
+Crimerate in area: Crime rate in the property's area.
