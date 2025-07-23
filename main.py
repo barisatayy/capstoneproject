@@ -47,8 +47,6 @@ class HrLines:
 
 load_dotenv()
 
-matplotlib.use('TkAgg')
-
 df = pd.read_csv("datas/Dataset.csv")
 df = df.reset_index()
 df["View"] = df["View"].fillna("Nowhere")
